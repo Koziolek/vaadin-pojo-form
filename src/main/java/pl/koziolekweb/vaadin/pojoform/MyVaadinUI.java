@@ -13,37 +13,50 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import pl.koziolekweb.vaadin.pojoform.converters.AddressConverter;
 import pl.koziolekweb.vaadin.pojoform.converters.MyConverterFactory;
+import pl.koziolekweb.vaadin.pojoform.model.Address;
+import pl.koziolekweb.vaadin.pojoform.model.Human;
 
 @Theme("mytheme")
 @SuppressWarnings("serial")
-public class MyVaadinUI extends UI
-{
+public class MyVaadinUI extends UI {
 
-    @WebServlet(value = "/*", asyncSupported = true)
-    @VaadinServletConfiguration(productionMode = false, ui = MyVaadinUI.class, widgetset = "pl.koziolekweb.vaadin.pojoform.AppWidgetSet")
-    public static class Servlet extends VaadinServlet {
-    }
+	private VerticalLayout layout;
+	private final MyConverterFactory converterFactory;
+	private CustomForm humanForm;
+
+	@WebServlet(value = "/*", asyncSupported = true)
+	@VaadinServletConfiguration(productionMode = false, ui = MyVaadinUI.class, widgetset = "pl.koziolekweb.vaadin.pojoform.AppWidgetSet")
+	public static class Servlet extends VaadinServlet {
+	}
 
 	public MyVaadinUI() {
 		super();
-		MyConverterFactory converterFactory = new MyConverterFactory();
+		converterFactory = new MyConverterFactory();
 		converterFactory.addConverter(new AddressConverter());
-		getSession().setConverterFactory(converterFactory);
 	}
 
 	@Override
-    protected void init(VaadinRequest request) {
-        final VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(true);
-        setContent(layout);
-        
-        Button button = new Button("Click Me");
-        button.addClickListener(new Button.ClickListener() {
-            public void buttonClick(ClickEvent event) {
-                layout.addComponent(new Label("Thank you for clicking"));
-            }
-        });
-        layout.addComponent(button);
-    }
+	protected void init(VaadinRequest request) {
+		getSession().setConverterFactory(converterFactory);
+		layout = new VerticalLayout();
+		layout.setMargin(true);
+		setContent(layout);
+
+		Human human = new Human();
+		human.setFirstName("Jan");
+		human.setAddress(new Address("Warszawa", "Banacha", 1L));
+
+		humanForm = new CustomForm(human);
+		layout.addComponent(humanForm);
+
+
+		Button button = new Button("Click Me");
+		button.addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				    humanForm.commit();
+			}
+		});
+		layout.addComponent(button);
+	}
 
 }

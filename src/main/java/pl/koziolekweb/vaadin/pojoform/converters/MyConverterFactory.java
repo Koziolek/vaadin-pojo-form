@@ -14,7 +14,7 @@ import org.apache.commons.collections.map.MultiKeyMap;
  */
 public class MyConverterFactory extends DefaultConverterFactory {
 
-	MultiKeyMap additionalConverters = new MultiKeyMap();
+	private MultiKeyMap additionalConverters = new MultiKeyMap();
 
 	public <PRESENTATION, MODEL> void addConverter(Converter<PRESENTATION, MODEL> converter) {
 		additionalConverters.put(converter.getPresentationType(), converter.getModelType(), converter);
@@ -22,7 +22,7 @@ public class MyConverterFactory extends DefaultConverterFactory {
 
 	@Override
 	public <PRESENTATION, MODEL> Converter<PRESENTATION, MODEL> createConverter(Class<PRESENTATION> presentationClass, Class<MODEL> modelClass) {
-		Converter<PRESENTATION, MODEL> converter = createConverter(presentationClass, modelClass);
+		Converter<PRESENTATION, MODEL> converter = super.createConverter(presentationClass, modelClass);
 		if (converter == null) {
 			converter = (Converter<PRESENTATION, MODEL>) additionalConverters.get(presentationClass, modelClass);
 		}

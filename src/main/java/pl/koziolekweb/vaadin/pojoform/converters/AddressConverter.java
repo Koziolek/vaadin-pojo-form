@@ -24,9 +24,11 @@ public class AddressConverter implements Converter<AddressField, Address> {
 	@Override
 	public AddressField convertToPresentation(Address value, Class<? extends AddressField> targetType, Locale locale) throws ConversionException {
 		AddressField af = new AddressField();
-		af.setCity(value.getCity());
-		af.setStreet(value.getStreet());
-		af.setNumber(value.getNumber());
+		if (value != null) {
+			af.setCity(value.getCity());
+			af.setStreet(value.getStreet());
+			af.setNumber(value.getNumber());
+		}
 		return af;
 	}
 

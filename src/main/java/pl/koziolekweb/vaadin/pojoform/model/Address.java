@@ -45,4 +45,13 @@ public class Address {
 	public void setNumber(Long number) {
 		this.number = number;
 	}
+
+	@Override
+	public String toString() {
+		return "Address{" +
+				"city='" + city + '\'' +
+				", street='" + street + '\'' +
+				", number=" + number +
+				'}';
+	}
 }
